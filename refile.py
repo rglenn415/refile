@@ -32,9 +32,9 @@ def retrieve_arguments():
 
     Functionality:
         Takes files user inputs on command line and creates
-        file instances with the ipynb and py file extensions.
+        file instances with the .ipynb and .py file extensions.
 
-    Ouput:
+    Output:
         list of file class instances
 
     """
@@ -92,7 +92,7 @@ def main():
 
     Output:
         n .py files in current directory
-    (-> where n = # of ipynb from command line <-)
+    (-> where n = # of .ipynb from command line <-)
     """
     # files will contain file instances that contain .ipynb and .py file names
     # for every .ipynb file inputed from the command line
