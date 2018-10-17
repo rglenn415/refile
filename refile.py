@@ -39,13 +39,11 @@ def main():
 	Functionality: Converts ipynb files to py files
 	Output: n py files in current directory (where n = # of ipynb from command line)
 	"""
+	#files will contain file instances (which contain ipynb and py file names)
+	#for every ipynb file inputed from the command line
 	files = retrieve_arguments()
 
 	for file in files:
-		#Reads file and creates a json object
-		ipynb = open(file.ipynb,'r')
-		ipynb_json = json.load(ipynb)
-
 		#User has to decide if they want to overwrite the file
 		if os.path.isfile(file.py):
 			#Will not allow you to perform this action
@@ -58,29 +56,27 @@ def main():
 			user_input = input(f'Do you want to OVERWRITE {file.py}\nProceed ([y]/n)? ')
 			if user_input == 'y':
 				continue
+		#Opens the ipynb file
+		#Creates (or overwrites if the user has given consent) the py file
+		with open(file.py,'w'),open(file.ipynb,'r') as py,ipynb:
+			#creates a json object from ipynb file
+			ipynb_json = json.load(ipynb)
 
-		#Creates new py file
-		py = open(file.py,'w')
-
-		for cell in ipynb_json['cells']:
-			#Only writes contents from code cells
-			if cell['cell_type'] != 'code':
-				continue
-			for line in cell['source']:
-				#Replaces new line chars because not every line has one
-				#By removing new line chars and appending at the end 
-				#we create consistent styling in the new file
-				line = line.replace('\n','')
-				py.write(line)
+			for cell in ipynb_json['cells']:
+				#Only writes contents from code cells
+				if cell['cell_type'] != 'code':
+					continue
+				for line in cell['source']:
+					#Replaces new line chars because not every line has one
+					#By removing new line chars and appending at the end 
+					#we create consistent styling in the new file
+					line = line.replace('\n','')
+					py.write(line)
+					py.write('\n')
+				#Adds a new line char at the end of each cell to replicate
+				#that natural division from cells
 				py.write('\n')
-			#Adds a new line char at the end of each cell to replicate
-			#that natural division from cells
-			py.write('\n')
 
-		#Closes files at the end of each loop 
-		#so we can move on to the next file
-		py.close()
-		ipynb.close()
 
 if __name__ == '__main__':
 	main()
