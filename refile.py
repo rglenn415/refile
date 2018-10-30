@@ -117,24 +117,29 @@ def main():
                 continue
         # Opens the .ipynb file
         # Creates (or overwrites if the user has given consent) the .py file
-        with open(file.py, 'w'), open(file.ipynb, 'r') as py, ipynb:
-            # Creates a json object from .ipynb file
-            ipynb_json = json.load(ipynb)
+        py = open(file.py,'w')
+        ipynb = open(file.ipynb,'r')
 
-            for cell in ipynb_json['cells']:
-                # Only writes contents from code cells
-                if cell['cell_type'] != 'code':
-                    continue
-                for line in cell['source']:
-                    # Replaces new line chars because not every line has one
-                    # By removing new line chars and appending at the end
-                    # we create consistent styling in the new file
-                    line = line.replace('\n', '')
-                    py.write(line)
-                    py.write('\n')
-                # Adds a new line char at the end of each cell to replicate
-                # that natural division from cells
+        #creates a json object from ipynb file
+        ipynb_json = json.load(ipynb)
+
+        for cell in ipynb_json['cells']:
+            #Only writes contents from code cells
+            if cell['cell_type'] != 'code':
+                continue
+            for line in cell['source']:
+                #Replaces new line chars because not every line has one
+                #By removing new line chars and appending at the end 
+                #we create consistent styling in the new file
+                line = line.replace('\n','')
+                py.write(line)
                 py.write('\n')
+            #Adds a new line char at the end of each cell to replicate
+            #that natural division from cells
+            py.write('\n')
+
+        py.close()
+        ipynb.close()
 
 
 if __name__ == '__main__':
